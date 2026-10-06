@@ -3,6 +3,7 @@
 An end-to-end, production-ready Machine Learning Operations (MLOps) system designed to predict industrial equipment failures from telemetry sensor data, automate dataset validation and feature engineering, track experiments via MLflow, deploy production models using FastAPI, orchestrate workflows with Apache Airflow, containerize with Docker, detect data and model drift, and execute automated retraining with safety promotion gates.
 
 ---
+#LIVE DEPLOYED LINK : https://predictive-maintenance-system-sp09.onrender.com/
 
 ## Quick Start
 
