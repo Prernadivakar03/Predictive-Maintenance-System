@@ -1,0 +1,87 @@
+project:
+  name: "Predictive Maintenance MLOps System"
+  version: "1.0.0"
+  environment: "development"
+
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  reports_dir: "data/reports"
+  db_dir: "data/database"
+  dataset_filename: "ai4i2020.csv"
+  processed_filename: "ai4i2020_processed.csv"
+  report_filename: "data_quality_report.json"
+  db_filename: "predictive_maintenance.db"
+  source_url: "https://archive.ics.uci.edu/ml/machine-learning-databases/00601/ai4i2020.csv"
+  fallback_urls:
+    - "https://raw.githubusercontent.com/tirthajyoti/Machine-Learning-with-Python/master/Datasets/ai4i2020.csv"
+
+mlflow:
+  tracking_uri: "sqlite:///mlflow.db"
+  experiment_name: "predictive-maintenance"
+  registered_model_name: "PredictiveMaintenanceModel"
+  artifact_location: "mlruns"
+
+monitoring:
+  reference_data_path: "data/processed/train.csv"
+  reports_dir: "data/reports"
+  html_report_filename: "drift_report.html"
+  json_report_filename: "drift_report.json"
+  summary_filename: "monitoring_summary.json"
+  thresholds:
+    p_value_alpha: 0.05
+    max_drifted_feature_ratio: 0.30
+    wasserstein_prob_drift_limit: 0.10
+    min_acceptable_recall: 0.75
+    min_acceptable_f1: 0.65
+    max_recall_drop_pct: 10.0
+
+retraining:
+  history_filename: "retraining_history.json"
+  min_new_samples_threshold: 500
+  promotion_criteria:
+    min_recall_threshold: 0.75
+    min_recall_improvement_pct: 0.0
+    max_precision_drop_pct: 5.0
+
+validation:
+  target_column: "Machine failure"
+  id_columns:
+    - "UDI"
+    - "Product ID"
+  expected_columns:
+    - "UDI"
+    - "Product ID"
+    - "Type"
+    - "Air temperature [K]"
+    - "Process temperature [K]"
+    - "Rotational speed [rpm]"
+    - "Torque [Nm]"
+    - "Tool wear [min]"
+    - "Machine failure"
+    - "TWF"
+    - "HDF"
+    - "PWF"
+    - "OSF"
+    - "RNF"
+  numerical_ranges:
+    "Air temperature [K]":
+      min: 250.0
+      max: 350.0
+    "Process temperature [K]":
+      min: 250.0
+      max: 370.0
+    "Rotational speed [rpm]":
+      min: 0.0
+      max: 5000.0
+    "Torque [Nm]":
+      min: 0.0
+      max: 200.0
+    "Tool wear [min]":
+      min: 0.0
+      max: 500.0
+  categorical_values:
+    "Type":
+      - "L"
+      - "M"
+      - "H"

@@ -1,0 +1,69 @@
+{
+  "selected_model": "Random Forest",
+  "selected_run_id": "0680580c15214e6cb61fd27bb7c50670",
+  "registry_info": {
+    "model_name": "PredictiveMaintenanceModel",
+    "version": "23",
+    "alias": "Production",
+    "run_id": "0680580c15214e6cb61fd27bb7c50670",
+    "model_uri": "runs:/0680580c15214e6cb61fd27bb7c50670/model"
+  },
+  "candidate_val_metrics": {
+    "Logistic Regression": {
+      "accuracy": 0.866,
+      "precision": 0.1739,
+      "recall": 0.7843,
+      "f1_score": 0.2847,
+      "roc_auc": 0.9122,
+      "pr_auc": 0.355,
+      "confusion_matrix": {
+        "true_negatives": 1259,
+        "false_positives": 190,
+        "false_negatives": 11,
+        "true_positives": 40
+      }
+    },
+    "Random Forest": {
+      "accuracy": 0.982,
+      "precision": 0.7,
+      "recall": 0.8235,
+      "f1_score": 0.7568,
+      "roc_auc": 0.9863,
+      "pr_auc": 0.7967,
+      "confusion_matrix": {
+        "true_negatives": 1431,
+        "false_positives": 18,
+        "false_negatives": 9,
+        "true_positives": 42
+      }
+    },
+    "XGBoost": {
+      "accuracy": 0.9853,
+      "precision": 0.7843,
+      "recall": 0.7843,
+      "f1_score": 0.7843,
+      "roc_auc": 0.9877,
+      "pr_auc": 0.818,
+      "confusion_matrix": {
+        "true_negatives": 1438,
+        "false_positives": 11,
+        "false_negatives": 11,
+        "true_positives": 40
+      }
+    }
+  },
+  "selected_model_test_metrics": {
+    "accuracy": 0.9793,
+    "precision": 0.6515,
+    "recall": 0.8431,
+    "f1_score": 0.735,
+    "roc_auc": 0.9701,
+    "pr_auc": 0.8715,
+    "confusion_matrix": {
+      "true_negatives": 1426,
+      "false_positives": 23,
+      "false_negatives": 8,
+      "true_positives": 43
+    }
+  }
+}

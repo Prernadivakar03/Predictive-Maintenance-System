@@ -1,0 +1,40 @@
+# Byte-compiled / caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Packaging
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environments & node
+.venv/
+env/
+venv/
+ENV/
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Data, runtime state and experiment tracking (mounted as volumes instead)
+data/raw/*.csv
+data/predictions/
+logs/
+mlruns/
+mlartifacts/
+mlflow.db
+.env
+
+# Git & IDEs
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,71 @@
+# Predictive Maintenance MLOps stack
+#
+#   docker compose up --build            -> dashboard + API on :8000, MLflow UI on :5000
+#   docker compose --profile airflow up  -> additionally Airflow on :8080 (experimental, see below)
+#
+# Run `python -m src.pipeline` once on the host (or press "Run pipeline" in the dashboard) so that
+# ./mlflow.db exists BEFORE the first `docker compose up`; otherwise Docker creates a directory with that name.
+
+services:
+  fastapi_app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: predictive_maintenance_api
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - MLFLOW_TRACKING_URI=sqlite:////app/mlflow.db
+      - MLFLOW_UI_URL=http://localhost:5000
+      - AIRFLOW_UI_URL=http://localhost:8080
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./mlflow.db:/app/mlflow.db
+      - ./mlruns:/app/mlruns
+      - ./reports:/app/reports
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  mlflow_server:
+    # Reuses the API image (MLflow is already installed there) instead of pip-installing on every start
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: predictive_maintenance_mlflow
+    command: mlflow ui --backend-store-uri sqlite:////app/mlflow.db --host 0.0.0.0 --port 5000
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlflow.db:/app/mlflow.db
+      - ./mlruns:/app/mlruns
+    restart: unless-stopped
+
+  # EXPERIMENTAL: not part of the default stack and not covered by the project's tests.
+  # Runs the weekly DAG in dags/predictive_maintenance_dag.py. First start installs the ML dependencies
+  # into the Airflow image (a few minutes). Admin password is printed in `docker compose logs airflow`.
+  airflow:
+    profiles: ["airflow"]
+    image: apache/airflow:2.10.2-python3.11
+    container_name: predictive_maintenance_airflow
+    command: standalone
+    ports:
+      - "8080:8080"
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=false
+      - AIRFLOW__CORE__DAGS_FOLDER=/opt/project/dags
+      - PYTHONPATH=/opt/project
+      - MLFLOW_TRACKING_URI=sqlite:////opt/project/mlflow.db
+      - MPLBACKEND=Agg
+      - _PIP_ADDITIONAL_REQUIREMENTS=pandas scikit-learn xgboost mlflow>=3.0.0 pyyaml python-dotenv requests joblib seaborn matplotlib scipy
+    volumes:
+      - ./:/opt/project
+    restart: unless-stopped

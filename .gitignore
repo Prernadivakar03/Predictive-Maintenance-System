@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+/build/
+develop-eggs/
+/dist/
+downloads/
+eggs/
+.eggs/
+/lib/
+/lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# Data & Databases
+data/raw/*.csv
+data/processed/*.csv
+data/reports/*.json
+data/database/*.db
+*.sqlite
+*.sqlite3
+logs/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Frontend
+frontend/node_modules/
+# frontend/dist is committed-optional: remove the next line to ship the prebuilt UI in git
+# frontend/dist/
+
+# Runtime state written by the dashboard/API
+data/predictions/
+data/reports/jobs.json
+data/reports/monitoring_context.json
+data/reports/monitoring_history.jsonl

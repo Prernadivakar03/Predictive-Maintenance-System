@@ -1,0 +1,25 @@
+[
+  {
+    "timestamp": "2026-10-02T09:01:14.100547",
+    "old_model_version": 9,
+    "new_model_version": "10",
+    "promotion_status": "PROMOTED",
+    "promotion_reason": "New Model Version 10 met evaluation criteria (Test Recall: 0.8431).",
+    "trigger_reason": "Manual / Force Override",
+    "selected_algorithm": "Random Forest",
+    "test_metrics": {
+      "accuracy": 0.9793,
+      "precision": 0.6515,
+      "recall": 0.8431,
+      "f1_score": 0.735,
+      "roc_auc": 0.9701,
+      "pr_auc": 0.8715,
+      "confusion_matrix": {
+        "true_negatives": 1426,
+        "false_positives": 23,
+        "false_negatives": 8,
+        "true_positives": 43
+      }
+    }
+  }
+]

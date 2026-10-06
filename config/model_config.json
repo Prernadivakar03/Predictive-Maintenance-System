@@ -1,0 +1,37 @@
+{
+  "target_column": "Machine failure",
+  "feature_columns": {
+    "numerical": [
+      "Air temperature [K]",
+      "Process temperature [K]",
+      "Rotational speed [rpm]",
+      "Torque [Nm]",
+      "Tool wear [min]"
+    ],
+    "categorical": [
+      "Type"
+    ]
+  },
+  "failure_modes": [
+    "TWF",
+    "HDF",
+    "PWF",
+    "OSF",
+    "RNF"
+  ],
+  "model_parameters": {
+    "xgboost": {
+      "n_estimators": 100,
+      "max_depth": 5,
+      "learning_rate": 0.1,
+      "scale_pos_weight": 10.0,
+      "random_state": 42
+    },
+    "random_forest": {
+      "n_estimators": 100,
+      "max_depth": 10,
+      "class_weight": "balanced",
+      "random_state": 42
+    }
+  }
+}

@@ -1,0 +1,52 @@
+# ---- Stage 1: build the React dashboard ------------------------------------------------------
+FROM node:20-alpine AS ui
+WORKDIR /ui
+COPY frontend/package.json ./
+RUN npm install --no-audit --no-fund
+COPY frontend/ ./
+RUN npm run build
+
+# ---- Stage 2: API + dashboard ----------------------------------------------------------------
+FROM python:3.11-slim
+
+# Prevent Python from writing .pyc files and enable unbuffered logging
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    MPLBACKEND=Agg \
+    PORT=8000
+
+WORKDIR /app
+
+# curl: container health check. libgomp1: OpenMP runtime required by XGBoost on slim images.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Layer 1: Copy requirements & install dependencies (Cached unless requirements change)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Layer 2: Copy application code and model artifacts
+COPY config/ config/
+COPY src/ src/
+COPY data/processed/ data/processed/
+COPY models/ models/
+COPY reports/ reports/
+COPY .env.example .env
+COPY --from=ui /ui/dist frontend/dist
+
+# Create non-root user for security best practices; runtime folders must be writable
+RUN useradd -m -u 1000 appuser \
+    && mkdir -p logs data/raw data/reports data/predictions mlruns \
+    && chown -R appuser:appuser /app
+USER appuser
+
+EXPOSE 8000
+
+# Container Health Check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Start FastAPI server (inference API + dashboard) via Uvicorn
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
