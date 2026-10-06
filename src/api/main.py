@@ -86,6 +86,7 @@ def read_root(request: Request):
         "health": "/health"
     }
 
+@app.get("/api/health", response_model=HealthResponse, tags=["Health"], include_in_schema=False)
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
 def health_check():
     """

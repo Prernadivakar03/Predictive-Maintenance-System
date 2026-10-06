@@ -9,11 +9,11 @@ import { useApi } from "../lib/hooks.js";
 export default function System() {
   const toast = useToast();
   const system = useApi("/api/system");
-  const health = useApi("/health", { interval: 10000 });
   const [level, setLevel] = useState("ALL");
   const [auto, setAuto] = useState(true);
   const logs = useApi("/api/logs?lines=300", { interval: auto ? 5000 : 0 });
   const [busy, setBusy] = useState(false);
+  const health = useApi("/api/health", { interval: 10000 });
 
   const reload = async () => {
     setBusy(true);

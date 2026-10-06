@@ -65,8 +65,7 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [theme, toggleTheme] = useTheme();
   const overview = useApi("/api/overview", { interval: 20000 });
-  const health = useApi("/health", { interval: 15000 });
-
+  const health = useApi("/api/health", { interval: 15000 });
   useEffect(() => setOpen(false), [route]);
 
   const active = ROUTES.find((r) => r.path === route) || ROUTES[0];
